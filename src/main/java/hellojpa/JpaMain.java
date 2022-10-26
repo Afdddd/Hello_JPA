@@ -16,7 +16,7 @@ public class JpaMain {
             tx.begin(); // 트랜잭션 시작
 
             Member findMember = em.find(Member.class, 1L);
-            findMember.setName("Hello");
+            em.remove(findMember);
 
             tx.commit(); // 커밋
         } catch (Exception e) {

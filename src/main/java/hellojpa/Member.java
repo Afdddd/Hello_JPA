@@ -6,6 +6,11 @@ import javax.persistence.Id;
 @Entity
 public class Member {
 
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Id
     private Long id;
 

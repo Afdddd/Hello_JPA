@@ -15,8 +15,8 @@ public class JpaMain {
         try {
             tx.begin(); // 트랜잭션 시작
 
-            Member findMember = em.find(Member.class, 1L);
-            em.remove(findMember);
+            Member member = new Member(1L,"hello");
+            em.persist(member); // 영속성 컨텍스트 관리
 
             tx.commit(); // 커밋
         } catch (Exception e) {

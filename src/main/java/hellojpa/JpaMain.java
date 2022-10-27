@@ -15,8 +15,9 @@ public class JpaMain {
         try {
             tx.begin(); // 트랜잭션 시작
 
-            Member member = new Member(1L,"hello");
-            em.persist(member); // 영속성 컨텍스트 관리
+            Member findMember = em.find(Member.class, 1L); // 영속
+            em.detach(findMember);  // 준영속
+            findMember.setName("hi"); // 반영 안됨
 
             tx.commit(); // 커밋
         } catch (Exception e) {

@@ -6,7 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
- * 쓰기 지연
+ * Dirty Checking
  */
 public class JpaMain {
     public static void main(String[] args) {
@@ -18,14 +18,14 @@ public class JpaMain {
         try {
             tx.begin(); // 트랜잭션 시작
 
-            Member member1 = new Member(10L, "A");
-            Member member2 = new Member(11L, "B");
+            Member member = new Member(20L, "dirtyChecking"); // 엔티티 생성
+            em.persist(member); // 엔티티 영속
 
-            em.persist(member1);
-            System.out.println("======================");
-            em.persist(member2);
-            System.out.println("======================");
-            //persist() 할때마다 쿼리를 보내지 않고 SQL저장소에 모아서 한번에 보낸다.
+            Member findMember = em.find(Member.class, 20L); // 조회
+            findMember.setName("cleanChecking"); // 수정
+            //em.persist(findMember);
+
+            // jpa의 변경감지를 통해 마치 컬렉션에서 객체를 수정하듯이 테이블을 수정할 수 있다.
 
             tx.commit(); // 커밋
         } catch (Exception e) {

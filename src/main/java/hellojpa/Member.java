@@ -4,33 +4,51 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 필드와 컬럼 매핑
+ * 단방향 연관관계
  */
 
+
 @Entity
+@Table
 public class Member {
 
     @Id
+    @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "name")
-    private String username;
+    @Column(name = "USERNAME")
+    private String name;
 
-    private Integer age;
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    @Lob
-    private String description;
-
-    public Member() {
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }
+

@@ -7,7 +7,7 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 /**
- * 다대일
+ * 일대다
  */
 
 public class JpaMain {
@@ -22,30 +22,14 @@ public class JpaMain {
             /**
              * 저장
              */
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
-
             Member member = new Member();
             member.setName("MemberA");
-            member.setTeam(team);
             em.persist(member);
 
-            /**
-             * 양방향 조회
-             */
-
-            // member -> team 조회 가능
-            Member findMember = em.find(Member.class, member.getId());
-            Team findTeam = findMember.getTeam();
-
-            // team -> member 조회 가능
-            List<Member> members = findTeam.getMembers();
-            for (Member m : members) {
-                System.out.println("m = "+m.getName());
-            }
-
-
+            Team team = new Team();
+            team.setName("TeamA");
+            team.getMembers().add(member);
+            em.persist(team);
 
 
 

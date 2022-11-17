@@ -7,32 +7,46 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 /**
- * 양방향 매핑시 주의할점 1.
- *  연관관계의 주인에 값을 입력하지 않음.
+ * 다대일
  */
+
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
         EntityManager em = emf.createEntityManager();
 
         EntityTransaction tx = em.getTransaction();
+        tx.begin(); // 트랜잭션 시작
 
         try {
-            tx.begin(); // 트랜잭션 시작
-
-            // 저장
-            Member member = new Member();
-            member.setName("MemberA");
-            // member.setTeam(team);  연관관계의 주인에게 값을 입력해야한다.
-            em.persist(member);
-
+            /**
+             * 저장
+             */
             Team team = new Team();
             team.setName("TeamA");
-            team.getMembers().add(member); // mappedBy 읽기전용이기 때문에 데이터베이스에 반영이 안된다.
             em.persist(team);
 
-            em.flush();
-            em.clear();
+            Member member = new Member();
+            member.setName("MemberA");
+            member.setTeam(team);
+            em.persist(member);
+
+            /**
+             * 양방향 조회
+             */
+
+            // member -> team 조회 가능
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam();
+
+            // team -> member 조회 가능
+            List<Member> members = findTeam.getMembers();
+            for (Member m : members) {
+                System.out.println("m = "+m.getName());
+            }
+
+
+
 
 
             tx.commit(); // 커밋
